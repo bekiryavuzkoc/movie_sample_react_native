@@ -23,10 +23,8 @@ export default function MovieSkeleton() {
 
   return (
     <Animated.View style={[styles.card, { opacity }]}>
-      {/* Poster skeleton */}
       <View style={styles.thumbnail} />
 
-      {/* Text skeletons */}
       <View style={styles.info}>
         <View style={styles.line} />
         <View style={[styles.line, { width: "40%" }]} />

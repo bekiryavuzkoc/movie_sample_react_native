@@ -17,18 +17,15 @@ export default function MovieCard({ id, title, posterURL, imdbId, onPress }: Pro
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.card} activeOpacity={0.8}>
-      {/* Thumbnail */}
       <Image
         source={{ uri: posterURL || DEFAULT_IMAGE }}
         style={styles.thumbnail}
       />
 
-      {/* Info */}
       <View style={styles.infoContainer}>
         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
           <Text style={styles.title}>{title}</Text>
 
-          {/* ❤️ Favourite Button */}
           <TouchableOpacity
             onPress={() => toggleFavourite(id)}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
