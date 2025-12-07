@@ -1,20 +1,38 @@
 # 🎬 React Native Movie Demo App  
-React Native + Expo ile oluşturulmuş hafif bir demo uygulaması.
-
-Bu proje; **Zustand state management**, **Zod validation**,  
-**custom API client**, **token refresh pipeline**,  
-**AsyncStorage persist** ve **Jest test altyapısı** gibi konularda profesyonel bir örnek olması için hazırlanmıştır.
+React Native + Expo ile oluşturulmuş bir demo uygulaması.
 
 ---
 
 # 🎯 Projenin Amacı
 
-### ✅ Jest test altyapısını Expo içinde sorunsuz çalıştırmak  
-### ✅ Zustand store mimarisini test edilebilir şekilde kurmak  
-### ✅ AsyncStorage persist + hydration mimarisini doğru şekilde uygulamak  
-### ✅ Type-safe API client oluşturmak (Zod validation)  
-### ✅ Token refresh + retry + timeout gibi gelişmiş network mekanizmalarını öğretmek  
-### ✅ normalizeError + Toast ile konsolide hata yönetimi yapmak  
+### 🖥️ **UI Geliştirme Pratiklerini Göstermek**
+- React Native component mimarisi
+- Ekran ayrımı, navigation ve state yönetimi
+- Movie List ve Movie Detail ekranları
+- Loading, error ve fallback UI senaryoları
+- Clean & reusable UI patterns
+
+### 🧪 **Test Edilebilir Bir Yapı Oluşturmak**
+- Jest test ortamının Expo içinde doğru şekilde çalıştırılması
+- AsyncStorage mock kullanımı
+- Zustand store’larının beklendiği gibi davranış göstermesi
+- Network isteklerinin mock’lanması
+- Retry, timeout ve refresh token mekanizmalarının test edilmesi
+
+### 🧠 **State Yönetimi Mimarisi**
+- Zustand ile sade, predictable ve test edilebilir global state modeli
+- hydrate() mekanizması ile persist edilmiş state'in yüklenmesi
+- Favourites ve Token store mantığının ayrıştırılması
+- Domain-level mapping (Movie modeli)
+
+### 🌐 **Type-Safe & Güvenli Network Katmanı**
+- Zod ile response validation (type-safe API)
+- Custom httpRequest pipeline:
+  - Retry
+  - Timeout
+  - 401 → refresh token
+  - normalizeError()
+  - Toast ile kullanıcıya geri bildirim
 
 ---
 
@@ -83,27 +101,24 @@ npx jest --coverage
 ```
 ### Örnek Coverage Çıktısı
 
- PASS  tests/tokenStore.test.js
--------------------------|---------|----------|---------|---------|-------------------
-File                     | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
--------------------------|---------|----------|---------|---------|-------------------
-All files                |   95.32 |    84.61 |     100 |   94.84 |                   
- api                     |   91.93 |    84.37 |     100 |   91.22 |                   
-  apiClient.ts           |     100 |      100 |     100 |     100 |                   
-  request.ts             |   90.56 |    84.37 |     100 |   89.58 | 46,66,140-142     
- constants               |     100 |      100 |     100 |     100 |                   
-  images.ts              |     100 |      100 |     100 |     100 |                   
- models                  |     100 |      100 |     100 |     100 |                   
-  Movie.ts               |     100 |      100 |     100 |     100 |                   
- src/config              |     100 |      100 |     100 |     100 |                   
-  config.ts              |     100 |      100 |     100 |     100 |                   
-  tokenStore.ts          |     100 |      100 |     100 |     100 |                   
- src/features            |     100 |       75 |     100 |     100 |                   
-  favouriteStore.ts      |     100 |       75 |     100 |     100 | 20                
- src/store               |     100 |     87.5 |     100 |     100 |                   
-  useMovieDetailStore.ts |     100 |     87.5 |     100 |     100 | 42                
-  useMoviesStore.ts      |     100 |     87.5 |     100 |     100 | 36                
--------------------------|---------|----------|---------|---------|-------------------
+| Dosya / Klasör              | % Stmts | % Branch | % Funcs | % Lines | Eksik Satırlar |
+|-----------------------------|--------:|---------:|--------:|--------:|-----------------|
+| **Tüm Dosyalar**           | **95.32** | **84.61** | **100** | **94.84** | — |
+| **api/**                    | 91.93 | 84.37 | 100 | 91.22 | — |
+| apiClient.ts                | 100 | 100 | 100 | 100 | — |
+| request.ts                  | 90.56 | 84.37 | 100 | 89.58 | 46, 66, 140–142 |
+| **constants/**              | 100 | 100 | 100 | 100 | — |
+| images.ts                   | 100 | 100 | 100 | 100 | — |
+| **models/**                 | 100 | 100 | 100 | 100 | — |
+| Movie.ts                    | 100 | 100 | 100 | 100 | — |
+| **src/config/**             | 100 | 100 | 100 | 100 | — |
+| config.ts                   | 100 | 100 | 100 | 100 | — |
+| tokenStore.ts               | 100 | 100 | 100 | 100 | — |
+| **src/features/**           | 100 | 75 | 100 | 100 | — |
+| favouriteStore.ts           | 100 | 75 | 100 | 100 | 20 |
+| **src/store/**              | 100 | 87.5 | 100 | 100 | — |
+| useMovieDetailStore.ts      | 100 | 87.5 | 100 | 100 | 42 |
+| useMoviesStore.ts           | 100 | 87.5 | 100 | 100 | 36 |
 
 # Testing Mimarisinin Özeti
 
