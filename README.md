@@ -1,50 +1,171 @@
-# Welcome to your Expo app 👋
+# 🎬 React Native Movie Demo App  
+React Native + Expo ile oluşturulmuş hafif bir demo uygulaması.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Bu proje; **Zustand state management**, **Zod validation**,  
+**custom API client**, **token refresh pipeline**,  
+**AsyncStorage persist** ve **Jest test altyapısı** gibi konularda profesyonel bir örnek olması için hazırlanmıştır.
 
-## Get started
+---
 
-1. Install dependencies
+# 🎯 Projenin Amacı
 
-   ```bash
-   npm install
-   ```
+### ✅ Jest test altyapısını Expo içinde sorunsuz çalıştırmak  
+### ✅ Zustand store mimarisini test edilebilir şekilde kurmak  
+### ✅ AsyncStorage persist + hydration mimarisini doğru şekilde uygulamak  
+### ✅ Type-safe API client oluşturmak (Zod validation)  
+### ✅ Token refresh + retry + timeout gibi gelişmiş network mekanizmalarını öğretmek  
+### ✅ normalizeError + Toast ile konsolide hata yönetimi yapmak  
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## 🚀 Özellikler
 
-In the output, you'll find options to open the app in a
+### 🎞️ Movie List
+- `/comedy` endpoint'inden film listesi çeker  
+- Poster URL fallback mekanizması  
+- Loading & Error state yönetimi  
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### 🎬 Movie Detail
+- `/comedy/:id` endpoint  
+- Zod schema validasyonu  
+- Domain model dönüşümü  
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### ⭐ Favourites Store
+- AsyncStorage persist  
+- `hydrate()` → initial load  
+- `toggleFavourite()` → add/remove  
+- Invalid JSON fallback  
 
-## Get a fresh project
+### 🔐 Token Store
+- Access + Refresh token saklama  
+- `hydrate()`, `setTokens()`, `clearTokens()`  
+- API tarafında refresh mekanizması ile entegre  
 
-When you're ready, run:
+---
 
-```bash
-npm run reset-project
+## 🧱 Teknoloji Stack
+
+| Teknoloji | Açıklama |
+|----------|----------|
+| **React Native + Expo** | Mobil uygulama iskeleti |
+| **Zustand** | Global state yönetimi |
+| **Zod** | API response validation |
+| **Jest** | Unit test runner |
+| **@testing-library/react-native** | Render & hooks testleri |
+| **babel-jest** | RN + TypeScript transform |
+| **AsyncStorage mock** | Persist testleri için |
+| **Custom API Client** | Retry + timeout + refresh token |
+
+---
+
+## ⚙️ Kurulum
+
+### 📦 Bağımlılıkları yükle
+```sh
+npm install
+```
+### ▶️ Expo başlat
+```sh
+npx expo start
+```
+# 🧪 Test Altyapısı
+
+Bu projede Jest, React Native + Expo ortamına uygun şekilde manuel olarak yapılandırılmıştır.
+
+### ▶️ Testleri çalıştırma
+```sh
+npx jest
+```
+### 📊 Coverage raporu alma
+
+```sh
+npx jest --coverage
+```
+### Örnek Coverage Çıktısı
+
+ PASS  tests/tokenStore.test.js
+-------------------------|---------|----------|---------|---------|-------------------
+File                     | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------------|---------|----------|---------|---------|-------------------
+All files                |   95.32 |    84.61 |     100 |   94.84 |                   
+ api                     |   91.93 |    84.37 |     100 |   91.22 |                   
+  apiClient.ts           |     100 |      100 |     100 |     100 |                   
+  request.ts             |   90.56 |    84.37 |     100 |   89.58 | 46,66,140-142     
+ constants               |     100 |      100 |     100 |     100 |                   
+  images.ts              |     100 |      100 |     100 |     100 |                   
+ models                  |     100 |      100 |     100 |     100 |                   
+  Movie.ts               |     100 |      100 |     100 |     100 |                   
+ src/config              |     100 |      100 |     100 |     100 |                   
+  config.ts              |     100 |      100 |     100 |     100 |                   
+  tokenStore.ts          |     100 |      100 |     100 |     100 |                   
+ src/features            |     100 |       75 |     100 |     100 |                   
+  favouriteStore.ts      |     100 |       75 |     100 |     100 | 20                
+ src/store               |     100 |     87.5 |     100 |     100 |                   
+  useMovieDetailStore.ts |     100 |     87.5 |     100 |     100 | 42                
+  useMoviesStore.ts      |     100 |     87.5 |     100 |     100 | 36                
+-------------------------|---------|----------|---------|---------|-------------------
+
+# Testing Mimarisinin Özeti
+
+## 1️⃣ API Client (Zod + Error Pipeline)
+
+- Response verileri `schema.parse()` ile validate edilir.
+- Hatalı JSON veya beklenmeyen response → otomatik olarak throw edilir.
+- Network hattı şu mekanizmaları içerir:
+  - ⏳ Timeout (AbortController kullanarak)
+  - 🔁 Retry (network hatalarında yeniden deneme)
+  - 🔐 401 durumunda refresh token akışı → token yenilenir → istek tekrarlanır
+  - 🧂 normalizeError() ile tek tip hata formatı
+  - 🔔 Toast.show ile kullanıcıya hata bildirimi
+
+
+---
+
+## 2️⃣ Retry Mekanizması Testi (httpRequest)
+
+```ts
+global.fetch = jest
+  .fn()
+  .mockRejectedValueOnce({ message: "Network error" }) // İlk deneme: hata
+  .mockResolvedValueOnce({
+    ok: true,
+    json: () => Promise.resolve({ ok: true })
+  }); // İkinci deneme: başarı
+
+const res = await httpRequest("/x", { retry: 1 });
+
+expect(res.ok).toBe(true);
+expect(global.fetch).toHaveBeenCalledTimes(2);
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 3️⃣ AsyncStorage Hydration Testi
 
-## Learn more
+```ts
+jest.spyOn(AsyncStorage, "getItem").mockResolvedValue("[\"a\"]");
 
-To learn more about developing your project with Expo, look at the following resources:
+await useFavouriteStore.getState().hydrate();
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+expect(useFavouriteStore.getState().favourites).toEqual(["a"]);
+```
 
-## Join the community
+## 4️⃣ Zustand Store Toggle Testi
 
-Join our community of developers creating universal apps.
+```ts
+useFavouriteStore.setState({ favourites: [] });
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+await useFavouriteStore.getState().toggleFavourite("movie1");
+
+expect(useFavouriteStore.getState().favourites).toEqual(["movie1"]);
+```
+
+## 5️⃣ Error Handling Senaryoları
+
+Uygulamanın network hattı aşağıdaki hata senaryolarını ele alacak şekilde tasarlanmıştır:
+
+- **Invalid JSON** → Zod parse hatası → throw
+- **Network error** → retry devreye girer (config'e bağlı)
+- **Timeout** → AbortController → "Request timeout" hatası
+- **401 Unauthorized** → refresh token çalışır → istek yeniden yapılır
+- **Refresh token da başarısız olursa** → kullanıcıya normalized error döner
+- **Her hata** → normalizeError() → Toast.show ile kullanıcıya bildirim gösterilir
+
