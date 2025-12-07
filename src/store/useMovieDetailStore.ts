@@ -21,10 +21,8 @@ export const useMovieDetailStore = create<MovieDetailStore>((set) => ({
     set({ loading: true, error: null });
 
     try {
-      // Zod validation already inside apiClient.get
       const movieData = await apiClient.get(`/comedy/${id}`, MovieSchema);
 
-      // Domain mapping
       const movie: Movie = {
         id: movieData.id,
         title: movieData.title,

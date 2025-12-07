@@ -14,22 +14,17 @@ type Props = {
 export default function TabIconWithBadge({ count, color }: Props) {
   const scale = useSharedValue(count > 0 ? 1 : 0);
 
-  // Badge görünüm animasyonu
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
 
-  // Her değişimde animasyonu tetikle
   React.useEffect(() => {
     scale.value = withTiming(count > 0 ? 1 : 0, { duration: 180 });
   }, [count]);
 
   return (
     <View style={styles.container}>
-      {/* Ana icon */}
       <Text style={[styles.star, { color }]}>{count > 0 ? "⭐" : "☆"}</Text>
-
-      {/* Badge (count > 0 olduğunda) */}
       {count > 0 && (
         <Animated.View style={[styles.badge, animatedStyle]}>
           <Text style={styles.badgeText}>{count}</Text>
@@ -55,7 +50,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: -2,
     right: -4,
-    backgroundColor: "#FF3B30", // iOS native badge red
+    backgroundColor: "#FF3B30",
     borderRadius: 10,
     minWidth: 16,
     height: 16,
@@ -63,7 +58,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
 
-    // iOS-style elevation
     shadowColor: "#000",
     shadowOpacity: 0.2,
     shadowRadius: 2,

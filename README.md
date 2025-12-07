@@ -141,11 +141,11 @@ npx jest --coverage
 ```ts
 global.fetch = jest
   .fn()
-  .mockRejectedValueOnce({ message: "Network error" }) // İlk deneme: hata
+  .mockRejectedValueOnce({ message: "Network error" })
   .mockResolvedValueOnce({
     ok: true,
     json: () => Promise.resolve({ ok: true })
-  }); // İkinci deneme: başarı
+  });
 
 const res = await httpRequest("/x", { retry: 1 });
 

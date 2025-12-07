@@ -30,6 +30,6 @@ export const useFavouriteStore = create<FavouriteState>((set, get) => ({
       : [...current, id];
 
     await AsyncStorage.setItem("favourites", JSON.stringify(updated));
-    set({ favourites: updated }); // <-- CRITICAL: UI RE-RENDERS
+    set({ favourites: updated });
   },
 }));

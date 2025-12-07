@@ -40,7 +40,7 @@ export default function FavouritesScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "white", // veya Themed background kullanabilirsin
+    backgroundColor: "white",
   },
 
   emptyContainer: {

@@ -5,7 +5,6 @@ describe("TokenStore", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    // başlangıç state'i sıfırla
     useTokenStore.setState({
       accessToken: null,
       refreshToken: null,
@@ -26,7 +25,6 @@ describe("TokenStore", () => {
   test("clearTokens removes both tokens and resets state", async () => {
     jest.spyOn(AsyncStorage, "removeItem").mockResolvedValue(undefined);
 
-    // önce tokenları doldur
     useTokenStore.setState({
       accessToken: "A",
       refreshToken: "R",
